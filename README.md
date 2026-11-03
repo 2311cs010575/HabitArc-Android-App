@@ -184,14 +184,3 @@ com.example.aiusage/
    ./gradlew installDebug
    ```
 5. **Grant Usage Access**: On first launch, open the alert banner to grant **Usage Access** permissions for HabitArc in Android System Settings.
-
----
-
-## 🎓 Guide for Project Examiner Presentation
-
-When demonstrating this project to evaluators:
-
-1. **Highlight Architecture**: Explain the clean separation between UI (Compose), State Management (ViewModel), Business Logic (Repositories), and Persistence (Room DB).
-2. **Demonstrate AI Integration**: Show how raw log data (screen time & expenses) is aggregated and converted into structured prompts sent to Groq's Llama 3.3 70B model.
-3. **Show Custom Canvas Drawing**: Point out that the charts are custom-built using Kotlin Canvas math (Bézier curves), avoiding heavy third-party dependencies.
-4. **Showcase Background Reliability**: Explain how `AppUsageWorker` keeps usage data updated in the background even when the app is closed.
