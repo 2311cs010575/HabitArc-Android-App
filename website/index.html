@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitArc | AI Wellbeing & Finance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .sidebar-item:hover { background-color: #f1f5f9; color: #0f172a; transition: all 0.3s; }
+        .gradient-text { background: linear-gradient(135deg, #0ea5e9, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass-card shadow-sm fixed h-full z-10 border-r border-slate-200">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold gradient-text"><i class="fas fa-leaf mr-2"></i>HabitArc</h1>
+        </div>
+        <nav class="mt-4 px-4">
+            <a href="#" class="sidebar-item flex items-center py-3 px-4 rounded-xl text-slate-600 active bg-slate-100 text-slate-900 font-semibold mb-1">
+                <i class="fas fa-chart-pie w-6"></i> <span>Dashboard</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center py-3 px-4 rounded-xl text-slate-500 mb-1">
+                <i class="fas fa-mobile-alt w-6"></i> <span>Digital Usage</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center py-3 px-4 rounded-xl text-slate-500 mb-1">
+                <i class="fas fa-wallet w-6"></i> <span>Expenses</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center py-3 px-4 rounded-xl text-slate-500 mb-1">
+                <i class="fas fa-brain w-6"></i> <span>AI Advisor</span>
+            </a>
+            <div class="mt-10 pt-4 border-t border-slate-100">
+                <a href="#" class="sidebar-item flex items-center py-3 px-4 rounded-xl text-slate-500">
+                    <i class="fas fa-cog w-6"></i> <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 flex-1 p-8">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800">Hello, Prashanth!</h2>
+                <p class="text-slate-500">Here's your summary for today, Feb 20, 2025.</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="bg-white p-2 rounded-full shadow-sm text-slate-400 hover:text-slate-600 border border-slate-100">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 font-bold border border-sky-200">
+                    P
+                </div>
+            </div>
+        </header>
+
+        <!-- Top Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-3xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-indigo-50 rounded-2xl text-indigo-500">
+                        <i class="fas fa-clock text-xl"></i>
+                    </div>
+                    <span class="text-xs font-semibold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg">-12% vs ytd</span>
+                </div>
+                <h3 class="text-slate-500 text-sm font-medium mb-1">Screen Usage</h3>
+                <p id="screenUsage" class="text-3xl font-bold text-slate-800">4h 22m</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-rose-50 rounded-2xl text-rose-500">
+                        <i class="fas fa-credit-card text-xl"></i>
+                    </div>
+                    <span class="text-xs font-semibold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg">+5% vs ytd</span>
+                </div>
+                <h3 class="text-slate-500 text-sm font-medium mb-1">Monthly Spend</h3>
+                <p id="totalSpend" class="text-3xl font-bold text-slate-800">$412.50</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl shadow-sm border border-slate-100 bg-gradient-to-br from-sky-500 to-indigo-600">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-white/20 rounded-2xl text-white">
+                        <i class="fas fa-bolt text-xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-white/80 text-sm font-medium mb-1">Budget Remaining</h3>
+                <p id="budgetLeft" class="text-3xl font-bold text-white">$87.50</p>
+                <div class="mt-4 w-full bg-white/20 rounded-full h-2">
+                    <div id="budgetBar" class="bg-white h-2 rounded-full" style="width: 82%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Section: AI and Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- AI Insights Card -->
+            <div class="glass-card p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="p-3 bg-amber-50 rounded-2xl text-amber-500 mr-4">
+                            <i class="fas fa-lightbulb text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">Llama 3 AI Prediction</h3>
+                    </div>
+                    <div id="aiText" class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6 italic text-slate-700 leading-relaxed">
+                        "Your screen time on <b>Instagram</b> has risen by 15% this week, often preceding late-night snack purchases. Consider setting a 45-minute social media limit after 9 PM to save roughly <b>$35/week</b> on impulsive food orders."
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 mb-1">Usage Forecast</p>
+                        <p class="font-bold text-slate-800">3h 50m <i class="fas fa-arrow-down text-emerald-500 text-xs ml-1"></i></p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 mb-1">Next Week Spend</p>
+                        <p class="font-bold text-slate-800">$105.00 <i class="fas fa-arrow-down text-emerald-500 text-xs ml-1"></i></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chart -->
+            <div class="glass-card p-8 rounded-3xl shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-slate-800 mb-6">Usage & Spend Trends</h3>
+                <canvas id="usageChart" height="220"></canvas>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Recent Apps & Transactions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-card p-8 rounded-3xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 mb-6">Top Applications</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mr-4"><i class="fab fa-instagram"></i></div>
+                            <div><p class="font-semibold text-slate-800 text-sm">Instagram</p><p class="text-xs text-slate-400">Social Media</p></div>
+                        </div>
+                        <p class="font-bold text-slate-700 text-sm">1h 45m</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center mr-4"><i class="fab fa-whatsapp"></i></div>
+                            <div><p class="font-semibold text-slate-800 text-sm">WhatsApp</p><p class="text-xs text-slate-400">Communication</p></div>
+                        </div>
+                        <p class="font-bold text-slate-700 text-sm">52m</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mr-4"><i class="fab fa-linkedin"></i></div>
+                            <div><p class="font-semibold text-slate-800 text-sm">LinkedIn</p><p class="text-xs text-slate-400">Professional</p></div>
+                        </div>
+                        <p class="font-bold text-slate-700 text-sm">30m</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-3xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 mb-6">Recent Expenses</h3>
+                <div id="expenseList" class="space-y-4">
+                    <!-- Dynamic List -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data Fetching Logic for Shared Service
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/sync');
+                const data = await response.json();
+
+                // Calculate Totals from dynamic data
+                const totalSpend = data.expenses.reduce((sum, item) => sum + item.amount, 0);
+                const totalUsageMs = data.usage.reduce((sum, item) => sum + item.usage_ms, 0);
+                const usageHours = (totalUsageMs / (1000 * 60 * 60)).toFixed(1);
+
+                // Update UI elements
+                document.getElementById('screenUsage').innerText = `${usageHours}h`;
+                document.getElementById('totalSpend').innerText = `$${totalSpend.toFixed(2)}`;
+                document.getElementById('budgetLeft').innerText = `$${(data.budget_limit - totalSpend).toFixed(2)}`;
+                document.getElementById('aiText').innerHTML = `"${data.ai_recommendation}"`;
+
+                // Update Progress Bar
+                const budgetRatio = ((data.budget_limit - totalSpend) / data.budget_limit) * 100;
+                document.getElementById('budgetBar').style.width = `${Math.max(0, budgetRatio)}%`;
+
+                // Update Lists
+                updateExpenseList(data.expenses);
+            } catch (error) {
+                console.error("Error fetching from shared service:", error);
+            }
+        }
+
+        function updateExpenseList(expenses) {
+            const list = document.getElementById('expenseList');
+            list.innerHTML = expenses.slice(-3).map(exp => `
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center mr-4"><i class="fas fa-receipt"></i></div>
+                        <div><p class="font-semibold text-slate-800 text-sm">${exp.title}</p><p class="text-xs text-slate-400">${exp.category}</p></div>
+                    </div>
+                    <p class="font-bold text-rose-500 text-sm">-$${exp.amount.toFixed(2)}</p>
+                </div>
+            `).join('');
+        }
+
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        // ... (Chart remains same)
+        fetchData(); // Call on load
+    </script>
+</body>
+</html>
